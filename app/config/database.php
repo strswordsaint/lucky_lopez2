@@ -75,7 +75,7 @@ defined('PREVENT_DIRECT_ACCESS') OR exit('No direct script access allowed');
     'port'		=> '3306',
     'username'	=> 'sql12800591',
     'password'	=> '7RKSjwS3yi',
-    'database'	=> 'crud',
+    'database'	=> 'sql12800591',
     'charset'	=> 'utf8mb4',
     'dbprefix'	=> '',
     // Optional for SQLite
