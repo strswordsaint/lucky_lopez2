@@ -1,73 +1,165 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Update User</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+
   <style>
-    /* CSS-only dot grid pattern */
-    body::before {
-      content: "";
-      position: fixed;
-      inset: 0;
-      background-image: radial-gradient(rgba(255,255,255,0.4) 1px, transparent 1px);
-      background-size: 30px 30px;
-      z-index: 0;
+    body {
+      min-height: 100vh;
+      margin: 0;
+      font-family: "Poppins", sans-serif;
+      background: url('<?= base_url() . "public/image/BG5.jpg"; ?>') no-repeat center center/cover;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .glass-container {
+      width: 100%;
+      max-width: 500px;
+      padding: 40px;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-radius: 20px;
+      box-shadow: 0 12px 28px rgba(30, 86, 49, 0.25);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      animation: fadeIn 0.5s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .glass-container h1 {
+      font-size: 2em;
+      font-weight: 600;
+      color: #1e5631;
+      margin-bottom: 30px;
+      text-align: center;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+      position: relative;
+    }
+
+    .form-group input,
+    .form-group select {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1px solid #d4af37;
+      border-radius: 12px;
+      font-size: 14px;
+      background: rgba(255, 255, 255, 0.8);
+      color: #144423;
+      transition: 0.3s ease;
+      box-sizing: border-box;
+      box-shadow: inset 0 2px 6px rgba(212, 175, 55, 0.15);
+    }
+
+    .form-group input:focus,
+    .form-group select:focus {
+      border-color: #1e5631;
+      box-shadow: 0 0 8px rgba(30, 86, 49, 0.3);
+      outline: none;
+    }
+
+    .toggle-password {
+      position: absolute;
+      right: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+      font-size: 1.1em;
+      color: #1e5631;
+    }
+
+    .btn-submit {
+      width: 100%;
+      padding: 14px;
+      border: none;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #1e5631, #a38b00);
+      color: #fff;
+      font-size: 1.1em;
+      font-weight: 500;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .btn-submit:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(30, 86, 49, 0.3);
+    }
+
+    .btn-return {
+      display: inline-block;
+      margin-top: 20px;
+      padding: 12px 22px;
+      background: #1e5631;
+      color: #fff;
+      border-radius: 10px;
+      text-decoration: none;
+      font-weight: 500;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .btn-return:hover {
+      background: #144423;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(20, 68, 35, 0.3);
     }
   </style>
 </head>
-<body class="relative bg-gradient-to-br from-green-100 via-emerald-200 to-green-300 flex items-center justify-center min-h-screen">
-
-  <!-- Card -->
-  <div class="relative z-10 bg-white p-8 rounded-2xl shadow-2xl w-full max-w-md">
-    <!-- Title -->
-    <h1 class="text-3xl font-extrabold text-center mb-6 bg-gradient-to-r from-green-700 to-emerald-600 bg-clip-text text-transparent">
-       Update User
-    </h1>
-
-    <!-- Form -->
-    <form action="<?= site_url('users/update/'.segment(4)); ?>" method="POST" class="space-y-5">
-      
-      <!-- Username -->
-      <div>
-        <label for="username" class="block text-gray-700 font-medium mb-1">Username</label>
-        <input 
-          type="text" 
-          id="username" 
-          name="username"
-          value="<?= html_escape($user['username']); ?>"
-          required
-          class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-green-500 focus:outline-none"
-        >
+<body>
+  <div class="glass-container">
+    <h1>Update User</h1>
+    <form action="<?= site_url('users/update/'.$user['id']) ?>" method="POST">
+      <div class="form-group">
+        <input type="text" name="username" value="<?= html_escape($user['username']); ?>" placeholder="Username" required>
+      </div>
+      <div class="form-group">
+        <input type="email" name="email" value="<?= html_escape($user['email']); ?>" placeholder="Email" required>
       </div>
 
-      <!-- Email -->
-      <div>
-        <label for="email" class="block text-gray-700 font-medium mb-1">Email Address</label>
-        <input 
-          type="email" 
-          id="email" 
-          name="email"         
-          value="<?= html_escape($user['email']); ?>"
-          required
-          class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-green-500 focus:outline-none"
-        >
-      </div>
+      <?php if(!empty($logged_in_user) && $logged_in_user['role'] === 'admin'): ?>
+        <div class="form-group">
+          <select name="role" required>
+            <option value="user" <?= $user['role'] === 'user' ? 'selected' : ''; ?>>User</option>
+            <option value="admin" <?= $user['role'] === 'admin' ? 'selected' : ''; ?>>Admin</option>
+          </select>
+        </div>
 
-      <!-- Buttons -->
-      <div class="flex gap-3">
-        <!-- Save -->
-        <button type="submit"
-          class="flex-1 bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition">
-           Save
-        </button>
-          <a href="<?= site_url('/'); ?>" 
-            class="flex-1 text-center bg-gray-400 hover:bg-gray-500 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition">
-            Cancel
-          </a>
+        <div class="form-group">
+          <input type="password" name="password" id="password" placeholder="New Password (leave blank if unchanged)">
+          <i class="fa-solid fa-eye toggle-password" id="togglePassword"></i>
+        </div>
+      <?php endif; ?>
+
+      <button type="submit" class="btn-submit">Update User</button>
     </form>
+    <a href="<?= site_url('/users'); ?>" class="btn-return">Cancel</a>
   </div>
 
+  <script>
+    const togglePassword = document.querySelector('#togglePassword');
+    const password = document.querySelector('#password');
+
+    if (togglePassword) {
+      togglePassword.addEventListener('click', function () {
+        const type = password.type === 'password' ? 'text' : 'password';
+        password.type = type;
+        this.classList.toggle('fa-eye');
+        this.classList.toggle('fa-eye-slash');
+      });
+    }
+  </script>
 </body>
 </html>

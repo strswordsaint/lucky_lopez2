@@ -1,0 +1,9 @@
+last_session_regenerate|i:1759328914;user|a:3:{s:2:"id";i:1;s:8:"username";s:5:"lucky";s:4:"role";s:5:"admin";}popup|s:242:"
+        <script>
+          Swal.fire({
+            icon: 'error',
+            title: 'Update Failed',
+            text: 'Something went wrong. Please try again.',
+            confirmButtonColor: '#d33'
+          });
+        </script>";id|i:1;username|s:5:"lucky";role|s:5:"admin";logged_in|b:1;
