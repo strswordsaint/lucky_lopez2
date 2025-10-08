@@ -17,8 +17,10 @@
       align-items: center;
       background: url('<?= base_url() . "public/image/BG2.jpg"; ?>') no-repeat center center/cover;
       padding: 20px;
+      overflow: hidden;
     }
 
+    /* Glass Container */
     .glass-container {
       width: 100%;
       max-width: 420px;
@@ -29,12 +31,7 @@
       border: 1px solid rgba(212, 175, 55, 0.4);
       box-shadow: 0 12px 28px rgba(30, 86, 49, 0.25);
       text-align: center;
-      animation: fadeIn 0.8s ease;
-    }
-
-    @keyframes fadeIn {
-      from {opacity: 0; transform: translateY(20px);}
-      to {opacity: 1; transform: translateY(0);}
+      transition: all 0.3s ease;
     }
 
     h2 {
@@ -59,18 +56,24 @@
       background: rgba(255, 255, 255, 0.8);
       color: #1e5631;
       font-size: 15px;
-      transition: 0.3s ease;
+      transition: all 0.3s ease;
       box-sizing: border-box;
     }
 
     .form-group input:focus {
       border-color: #1e5631;
-      box-shadow: 0 0 8px rgba(30, 86, 49, 0.35);
+      box-shadow: 0 0 10px rgba(30, 86, 49, 0.35);
       background: #fff;
+      transform: scale(1.02);
       outline: none;
     }
 
-    /* Eye icon */
+    /* Red highlight for wrong input */
+    .invalid-input {
+      border-color: #c62828 !important;
+      background: rgba(255, 0, 0, 0.08);
+    }
+
     .toggle-password {
       position: absolute;
       right: 14px;
@@ -79,14 +82,14 @@
       cursor: pointer;
       font-size: 1.2em;
       color: #a38b00;
-      transition: color 0.3s ease;
+      transition: transform 0.4s ease, color 0.3s ease;
     }
 
     .toggle-password:hover {
       color: #1e5631;
+      transform: translateY(-50%) rotate(15deg);
     }
 
-    /* Button */
     .btn-submit {
       width: 100%;
       padding: 14px;
@@ -98,60 +101,64 @@
       font-weight: 600;
       cursor: pointer;
       box-shadow: 0 6px 12px rgba(30, 86, 49, 0.35);
-      transition: background-color 0.3s ease, transform 0.2s ease;
+      transition: all 0.3s ease;
     }
 
     .btn-submit:hover {
-      background: #144423;
-      transform: translateY(-2px);
+      background: linear-gradient(135deg, #144423, #c7a600);
+      transform: translateY(-2px) scale(1.03);
+      box-shadow: 0 10px 20px rgba(30, 86, 49, 0.4);
     }
 
-    /* Error message */
-    .error-message {
-      background: rgba(255, 0, 0, 0.1);
-      border: 1px solid rgba(255, 0, 0, 0.3);
-      color: #a70000;
-      border-radius: 12px;
-      padding: 12px;
-      margin-bottom: 18px;
-      font-size: 0.9em;
-      font-weight: 600;
-      text-align: center;
+    .btn-submit:active {
+      transform: scale(0.97);
     }
 
-    /* Bottom text */
     .text-center {
       margin-top: 20px;
     }
 
     .text-center a {
-      color: #ffffffff;
+      color: #ffffff;
       font-weight: 600;
       text-decoration: none;
-      transition: 0.3s;
+      transition: color 0.3s ease, text-shadow 0.3s ease;
     }
 
     .text-center a:hover {
       text-decoration: underline;
       color: #a38b00;
+      text-shadow: 0 0 6px rgba(163,139,0,0.5);
     }
+
+    /* Shake animation */
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20% { transform: translateX(-10px); }
+      40% { transform: translateX(10px); }
+      60% { transform: translateX(-10px); }
+      80% { transform: translateX(10px); }
+    }
+
+    .shake {
+      animation: shake 0.5s;
+    }
+
   </style>
 </head>
 <body>
-  <div class="glass-container">
+  <div class="glass-container" id="loginContainer">
     <h2>Login</h2>
 
-    <?php if (!empty($error)): ?>
-      <div class="error-message"><?= $error ?></div>
-    <?php endif; ?>
-
-    <form method="post" action="<?= site_url('auth/login') ?>">
+    <form method="post" action="<?= site_url('auth/login') ?>" id="loginForm">
       <div class="form-group">
-        <input type="text" name="username" placeholder="Username" required>
+        <input type="text" name="username" placeholder="Username" required value="<?= isset($_POST['username']) ? html_escape($_POST['username']) : ''; ?>" 
+               class="<?= !empty($error) ? 'invalid-input' : ''; ?>">
       </div>
 
       <div class="form-group">
-        <input type="password" name="password" id="password" placeholder="Password" required>
+        <input type="password" name="password" id="password" placeholder="Password" required 
+               class="<?= !empty($error) ? 'invalid-input' : ''; ?>">
         <i class="fa-solid fa-eye toggle-password" id="togglePassword"></i>
       </div>
 
@@ -160,7 +167,7 @@
 
     <div class="text-center">
       <p>
-        Don’t have an account? 
+        Don’t have an account?
         <a href="<?= site_url('auth/register'); ?>">Register here</a>
       </p>
     </div>
@@ -169,6 +176,7 @@
   <script>
     const togglePassword = document.getElementById('togglePassword');
     const password = document.getElementById('password');
+    const container = document.getElementById('loginContainer');
 
     togglePassword.addEventListener('click', function () {
       const type = password.type === 'password' ? 'text' : 'password';
@@ -176,6 +184,14 @@
       this.classList.toggle('fa-eye');
       this.classList.toggle('fa-eye-slash');
     });
+
+    // Shake the container if there's an error
+    <?php if(!empty($error)): ?>
+      container.classList.add('shake');
+      container.addEventListener('animationend', function() {
+        container.classList.remove('shake');
+      });
+    <?php endif; ?>
   </script>
 </body>
 </html>

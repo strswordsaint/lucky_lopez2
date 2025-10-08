@@ -57,7 +57,7 @@ defined('PREVENT_DIRECT_ACCESS') OR exit('No direct script access allowed');
 |   Example: $database['another_example'] = array('key' => 'value')
 */
 
-/*$database['main'] = array(
+$database['main'] = array(
     'driver'	=> 'mysql',
     'hostname'	=> 'localhost',
     'port'		=> '3306',
@@ -67,19 +67,19 @@ defined('PREVENT_DIRECT_ACCESS') OR exit('No direct script access allowed');
     'charset'	=> 'utf8mb4',
     'dbprefix'	=> '',
     // Optional for SQLite
-    'path'      => ''*/
+    'path'      => ''
 
-    $database['main'] = array(
+    /*$database['main'] = array(
     'driver'	=> 'mysql',
     'hostname'	=> 'sql12.freesqldatabase.com',
     'port'		=> '3306',
-    'username'	=> 'sql12800591',
-    'password'	=> '7RKSjwS3yi',
-    'database'	=> 'sql12800591',
+    'username'	=> 'sql12801883',
+    'password'	=> 'sjQ2dRXVyp',
+    'database'	=> 'sql12801883',
     'charset'	=> 'utf8mb4',
     'dbprefix'	=> '',
     // Optional for SQLite
-    'path'      => ''
+    'path'      => ''*/
 );
 
 ?>

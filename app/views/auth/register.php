@@ -8,6 +8,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
 
   <style>
+    * { box-sizing: border-box; }
+
     body {
       margin: 0;
       font-family: "Poppins", sans-serif;
@@ -15,20 +17,23 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      background: url('<?= base_url() . "public/image/BG3.jpg"; ?>') no-repeat center center/cover;
+      background: url('<?= base_url() . "public/image/BG2.jpg"; ?>') no-repeat center center/cover;
       padding: 20px;
+      overflow: hidden;
     }
 
+    /* Glass Card */
     .glass-container {
       width: 100%;
       max-width: 460px;
       padding: 40px;
-      background: rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.12);
       backdrop-filter: blur(14px);
       border-radius: 20px;
       border: 1px solid rgba(212, 175, 55, 0.4);
       box-shadow: 0 12px 28px rgba(30, 86, 49, 0.25);
       text-align: center;
+      transition: all 0.3s ease;
     }
 
     h2 {
@@ -45,8 +50,7 @@
       text-align: left;
     }
 
-    .form-group input,
-    .form-group select {
+    input, select {
       width: 100%;
       padding: 12px 14px;
       border: 1.5px solid #a38b00;
@@ -54,19 +58,22 @@
       background: rgba(255, 255, 255, 0.75);
       color: #1e5631;
       font-size: 15px;
-      transition: 0.3s ease;
-      box-sizing: border-box;
+      transition: all 0.3s ease;
     }
 
-    .form-group input:focus,
-    .form-group select:focus {
+    input:focus, select:focus {
       border-color: #1e5631;
-      box-shadow: 0 0 8px rgba(30, 86, 49, 0.35);
+      box-shadow: 0 0 10px rgba(30, 86, 49, 0.45);
       background: #fff;
+      transform: scale(1.02);
       outline: none;
     }
 
-    /* Eye Icon */
+    .invalid-input {
+      border-color: #c62828 !important;
+      background: rgba(255, 0, 0, 0.08);
+    }
+
     .toggle-password {
       position: absolute;
       right: 14px;
@@ -75,14 +82,10 @@
       cursor: pointer;
       font-size: 1.2em;
       color: #a38b00;
-      transition: color 0.3s ease;
     }
 
-    .toggle-password:hover {
-      color: #1e5631;
-    }
+    .toggle-password:hover { color: #1e5631; }
 
-    /* Button */
     .btn-submit {
       width: 100%;
       padding: 14px;
@@ -93,16 +96,27 @@
       font-size: 1.1em;
       font-weight: 600;
       cursor: pointer;
-      box-shadow: 0 6px 12px rgba(30, 86, 49, 0.35);
-      transition: background-color 0.3s ease, transform 0.2s ease;
+      box-shadow: 0 6px 14px rgba(30, 86, 49, 0.35);
+      transition: all 0.25s ease;
     }
 
-    .btn-submit:hover {
-      background: #144423;
-      transform: translateY(-2px);
+    .btn-submit:hover { background: #144423; transform: translateY(-2px); }
+    .btn-submit:active { transform: scale(0.98); box-shadow: 0 3px 8px rgba(30, 86, 49, 0.4); }
+
+    .text-center { margin-top: 20px; }
+    .text-center a { color: #fff; font-weight: 600; text-decoration: none; }
+    .text-center a:hover { color: #a38b00; text-decoration: underline; }
+
+    /* Shake animation */
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-6px); }
+      50% { transform: translateX(6px); }
+      75% { transform: translateX(-4px); }
     }
 
-    /* Error message */
+    .shake { animation: shake 0.5s; }
+
     .error-message {
       background: rgba(255, 0, 0, 0.1);
       border: 1px solid rgba(255, 0, 0, 0.3);
@@ -114,26 +128,11 @@
       font-weight: 600;
       text-align: center;
     }
-
-    .text-center {
-      margin-top: 20px;
-    }
-
-    .text-center a {
-      color: #ffffffff;
-      font-weight: 600;
-      text-decoration: none;
-      transition: 0.3s;
-    }
-
-    .text-center a:hover {
-      text-decoration: underline;
-      color: #a38b00;
-    }
   </style>
 </head>
+
 <body>
-  <div class="glass-container">
+  <div class="glass-container" id="registerContainer">
     <h2>Register</h2>
 
     <?php if (!empty($error)): ?>
@@ -142,27 +141,33 @@
 
     <form method="POST" action="<?= site_url('auth/register'); ?>">
       <div class="form-group">
-        <input type="text" name="username" placeholder="Username" required>
+        <input type="text" name="username" placeholder="Username" required 
+               value="<?= isset($_POST['username']) ? html_escape($_POST['username']) : ''; ?>"
+               class="<?= !empty($error) ? 'invalid-input' : ''; ?>">
       </div>
 
       <div class="form-group">
-        <input type="email" name="email" placeholder="Email" required>
+        <input type="email" name="email" placeholder="Email" required
+               value="<?= isset($_POST['email']) ? html_escape($_POST['email']) : ''; ?>"
+               class="<?= !empty($error) ? 'invalid-input' : ''; ?>">
       </div>
 
       <div class="form-group">
-        <input type="password" name="password" id="password" placeholder="Password" required>
+        <input type="password" name="password" id="password" placeholder="Password" required
+               class="<?= !empty($error) ? 'invalid-input' : ''; ?>">
         <i class="fa-solid fa-eye toggle-password" id="togglePassword"></i>
       </div>
 
       <div class="form-group">
-        <input type="password" name="confirm_password" id="confirmPassword" placeholder="Confirm Password" required>
+        <input type="password" name="confirm_password" id="confirmPassword" placeholder="Confirm Password" required
+               class="<?= !empty($error) ? 'invalid-input' : ''; ?>">
         <i class="fa-solid fa-eye toggle-password" id="toggleConfirmPassword"></i>
       </div>
 
       <div class="form-group">
         <select name="role" required>
-          <option value="user" selected>User</option>
-          <option value="admin">Admin</option>
+          <option value="user" <?= isset($_POST['role']) && $_POST['role']=='user' ? 'selected' : 'selected'; ?>>User</option>
+          <option value="admin" <?= isset($_POST['role']) && $_POST['role']=='admin' ? 'selected' : ''; ?>>Admin</option>
         </select>
       </div>
 
@@ -177,21 +182,27 @@
   </div>
 
   <script>
+    // Password toggle
     function toggleVisibility(toggleId, inputId) {
       const toggle = document.getElementById(toggleId);
       const input = document.getElementById(inputId);
-
       toggle.addEventListener('click', function () {
-        const type = input.type === 'password' ? 'text' : 'password';
-        input.type = type;
-
+        input.type = input.type === 'password' ? 'text' : 'password';
         this.classList.toggle('fa-eye');
         this.classList.toggle('fa-eye-slash');
       });
     }
-
     toggleVisibility('togglePassword', 'password');
     toggleVisibility('toggleConfirmPassword', 'confirmPassword');
+
+    // Shake container on error
+    <?php if(!empty($error)): ?>
+      const container = document.getElementById('registerContainer');
+      container.classList.add('shake');
+      container.addEventListener('animationend', function() {
+        container.classList.remove('shake');
+      });
+    <?php endif; ?>
   </script>
 </body>
 </html>

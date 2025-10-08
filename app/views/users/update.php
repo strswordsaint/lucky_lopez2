@@ -6,6 +6,8 @@
   <title>Update User</title>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+  <!-- SweetAlert2 -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
   <style>
     body {
@@ -160,6 +162,18 @@
         this.classList.toggle('fa-eye-slash');
       });
     }
+
+    // SweetAlert2 for "No changes detected"
+    <?php if(isset($no_changes) && $no_changes === true): ?>
+      Swal.fire({
+        icon: 'info',
+        title: 'No Changes Detected',
+        text: 'You did not modify any fields.',
+        confirmButtonColor: '#1e5631'
+      }).then(() => {
+        window.history.back();
+      });
+    <?php endif; ?>
   </script>
 </body>
 </html>

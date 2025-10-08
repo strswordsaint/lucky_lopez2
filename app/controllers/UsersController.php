@@ -163,11 +163,16 @@ public function update($id)
             ];
         }
 
-        if ($this->UsersModel->update($id, $data)) {
-            redirect('/users');
+            if ($this->UsersModel->update($id, $data)) {
+                redirect('/users');
         } else {
-            echo "<script>alert('No changes detected.'); window.history.back();</script>";
-        }
+                // Pass 'no_changes' flag to the view
+                $data['user'] = $user;
+                $data['logged_in_user'] = $logged_in_user;
+                $data['no_changes'] = true;
+                $this->call->view('users/update', $data);
+            }
+
 
     } else {
         // Pass both the user being edited and the logged-in user to the view
